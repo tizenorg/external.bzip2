@@ -7,6 +7,7 @@ License: BSD
 Group: Applications/File
 URL: http://www.bzip.org/
 Source: http://www.bzip.org/%{version}/bzip2-%{version}.tar.gz
+Source1001: packaging/bzip2.manifest 
 
 # Change soname from libbz2.so.1.0 to libbz2.so.1
 Patch1: change_soname.patch
@@ -47,6 +48,7 @@ Libraries for applications using the bzip2 compression format.
 %patch1 -p1 -b .change_soname
 
 %build
+cp %{SOURCE1001} .
 
 make -f Makefile-libbz2_so CC="%{__cc}" AR=%{__ar} RANLIB=%{__ranlib} \
 	CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64 -fpic -fPIC" \
@@ -90,16 +92,19 @@ ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
 rm -rf ${RPM_BUILD_ROOT}
 
 %files
+%manifest bzip2.manifest
 %defattr(-,root,root,-)
 %doc LICENSE CHANGES README 
 %{_bindir}/*
 %doc %{_mandir}/*/*
 
 %files libs
+%manifest bzip2.manifest
 %defattr(-,root,root,-)
 /%{_lib}/*so.*
 
 %files devel
+%manifest bzip2.manifest
 %defattr(-,root,root,-)
 #%doc manual.html manual.pdf
 %{_includedir}/*

@@ -4,15 +4,13 @@ Name: bzip2
 Version: 1.0.5
 Release: 2
 License: BSD
-Group: Applications/File
+Group: Base/Compression
 URL: http://www.bzip.org/
-Source: http://www.bzip.org/%{version}/bzip2-%{version}.tar.gz
+Source: http://www.bzip.org/%{version}/%{name}-%{version}.tar.gz
 Source1001: packaging/bzip2.manifest 
 
 # Change soname from libbz2.so.1.0 to libbz2.so.1
 Patch1: change_soname.patch
-
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 Bzip2 is a freely available, patent-free, high quality data compressor.
@@ -60,28 +58,28 @@ make CC="%{__cc}" AR=%{__ar} RANLIB=%{__ranlib} \
 	%{?_smp_mflags} all
 
 %install
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf %{buildroot}
 
 chmod 644 bzlib.h 
-mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,/%{_lib},%{_libdir},%{_includedir}}
-cp -p bzlib.h $RPM_BUILD_ROOT%{_includedir}
+mkdir -p %{buildroot}/{%{_bindir},%{_mandir}/man1,/%{_lib},%{_libdir},%{_includedir}}
+cp -p bzlib.h %{buildroot}/%{_includedir}
 # temporary for rpm
-install -m 644 libbz2.a $RPM_BUILD_ROOT%{_libdir}
-install -m 755 libbz2.so.%{library_version} $RPM_BUILD_ROOT/%{_lib}
-install -m 755 bzip2-shared  $RPM_BUILD_ROOT%{_bindir}/bzip2
-install -m 755 bzip2recover bzgrep bzdiff bzmore  $RPM_BUILD_ROOT%{_bindir}/
-cp -p bzip2.1 bzdiff.1 bzgrep.1 bzmore.1  $RPM_BUILD_ROOT%{_mandir}/man1/
-ln -s bzip2 $RPM_BUILD_ROOT%{_bindir}/bunzip2
-ln -s bzip2 $RPM_BUILD_ROOT%{_bindir}/bzcat
-ln -s bzdiff $RPM_BUILD_ROOT%{_bindir}/bzcmp
-ln -s bzmore $RPM_BUILD_ROOT%{_bindir}/bzless
-ln -s libbz2.so.%{library_version} $RPM_BUILD_ROOT/%{_lib}/libbz2.so.1
-ln -s ../../%{_lib}/libbz2.so.1 $RPM_BUILD_ROOT/%{_libdir}/libbz2.so
-ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzip2recover.1
-ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bunzip2.1
-ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcat.1
-ln -s bzdiff.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcmp.1
-ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
+install -m 644 libbz2.a %{buildroot}/%{_libdir}
+install -m 755 libbz2.so.%{library_version} %{buildroot}//%{_lib}
+install -m 755 bzip2-shared  %{buildroot}/%{_bindir}/bzip2
+install -m 755 bzip2recover bzgrep bzdiff bzmore  %{buildroot}/%{_bindir}/
+cp -p bzip2.1 bzdiff.1 bzgrep.1 bzmore.1  %{buildroot}/%{_mandir}/man1/
+ln -s bzip2 %{buildroot}/%{_bindir}/bunzip2
+ln -s bzip2 %{buildroot}/%{_bindir}/bzcat
+ln -s bzdiff %{buildroot}/%{_bindir}/bzcmp
+ln -s bzmore %{buildroot}/%{_bindir}/bzless
+ln -s libbz2.so.%{library_version} %{buildroot}//%{_lib}/libbz2.so.1
+ln -s ../../%{_lib}/libbz2.so.1 %{buildroot}//%{_libdir}/libbz2.so
+ln -s bzip2.1 %{buildroot}/%{_mandir}/man1/bzip2recover.1
+ln -s bzip2.1 %{buildroot}/%{_mandir}/man1/bunzip2.1
+ln -s bzip2.1 %{buildroot}/%{_mandir}/man1/bzcat.1
+ln -s bzdiff.1 %{buildroot}/%{_mandir}/man1/bzcmp.1
+ln -s bzmore.1 %{buildroot}/%{_mandir}/man1/bzless.1
 
 
 %post libs -p /sbin/ldconfig
@@ -89,7 +87,7 @@ ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
 %postun libs  -p /sbin/ldconfig
 
 %clean
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf %{buildroot}
 
 %files
 %manifest bzip2.manifest
@@ -106,7 +104,6 @@ rm -rf ${RPM_BUILD_ROOT}
 %files devel
 %manifest bzip2.manifest
 %defattr(-,root,root,-)
-#%doc manual.html manual.pdf
 %{_includedir}/*
 /%{_libdir}/*so
 # Temporary for rpm

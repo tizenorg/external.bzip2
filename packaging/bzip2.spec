@@ -81,7 +81,6 @@ ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcat.1
 ln -s bzdiff.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcmp.1
 ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
 
-
 %post libs -p /sbin/ldconfig
 
 %postun libs  -p /sbin/ldconfig

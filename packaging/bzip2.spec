@@ -60,6 +60,9 @@ make CC="%{__cc}" AR=%{__ar} RANLIB=%{__ranlib} \
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
+# license
+mkdir -p %{buildroot}/usr/share/license
+cp LICENSE %{buildroot}/usr/share/license/%{name}
 
 chmod 644 bzlib.h
 mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,/%{_lib},%{_libdir},%{_includedir}}
@@ -106,6 +109,7 @@ rm -rf ${RPM_BUILD_ROOT}
 %{_datadir}/license/%{name}
 %{_bindir}/*
 %doc %{_mandir}/*/*
+/usr/share/license/%{name}
 
 %files libs
 %defattr(-,root,root,-)

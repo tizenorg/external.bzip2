@@ -115,3 +115,4 @@ rm -rf ${RPM_BUILD_ROOT}
 # Temporary for rpm
 %{_libdir}/*.a
 %manifest %{name}.manifest
+

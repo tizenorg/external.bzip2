@@ -2,11 +2,12 @@
 Summary: A file compression utility
 Name: bzip2
 Version: 1.0.5
-Release: 2
+Release: 4
 License: BSD
 Group: Applications/File
 URL: http://www.bzip.org/
 Source: http://www.bzip.org/%{version}/bzip2-%{version}.tar.gz
+Source1001: %{name}.manifest
 
 # Change soname from libbz2.so.1.0 to libbz2.so.1
 Patch1: change_soname.patch
@@ -15,11 +16,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %description
 Bzip2 is a freely available, patent-free, high quality data compressor.
-Bzip2 compresses files to within 10 to 15 percent of the capabilities 
-of the best techniques available.  However, bzip2 has the added benefit 
-of being approximately two times faster at compression and six times 
-faster at decompression than those techniques.  Bzip2 is not the 
-fastest compression utility, but it does strike a balance between speed 
+Bzip2 compresses files to within 10 to 15 percent of the capabilities
+of the best techniques available.  However, bzip2 has the added benefit
+of being approximately two times faster at compression and six times
+faster at decompression than those techniques.  Bzip2 is not the
+fastest compression utility, but it does strike a balance between speed
 and compression capability.
 
 Install bzip2 if you need a compression utility.
@@ -43,11 +44,11 @@ Group: System Environment/Libraries
 Libraries for applications using the bzip2 compression format.
 
 %prep
-%setup -q 
+%setup -q
 %patch1 -p1 -b .change_soname
 
 %build
-
+cp %{SOURCE1001} .
 make -f Makefile-libbz2_so CC="%{__cc}" AR=%{__ar} RANLIB=%{__ranlib} \
 	CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64 -fpic -fPIC" \
 	%{?_smp_mflags} all
@@ -60,7 +61,7 @@ make CC="%{__cc}" AR=%{__ar} RANLIB=%{__ranlib} \
 %install
 rm -rf ${RPM_BUILD_ROOT}
 
-chmod 644 bzlib.h 
+chmod 644 bzlib.h
 mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,/%{_lib},%{_libdir},%{_includedir}}
 cp -p bzlib.h $RPM_BUILD_ROOT%{_includedir}
 # temporary for rpm
@@ -81,6 +82,10 @@ ln -s bzip2.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcat.1
 ln -s bzdiff.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcmp.1
 ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
 
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/license
+cat LICENSE > $RPM_BUILD_ROOT%{_datadir}/license/bzip2
+cat LICENSE > $RPM_BUILD_ROOT%{_datadir}/license/bzip2-libs
+
 %post libs -p /sbin/ldconfig
 
 %postun libs  -p /sbin/ldconfig
@@ -90,13 +95,17 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE CHANGES README 
-%{_bindir}/*
+%doc LICENSE CHANGES README
 %doc %{_mandir}/*/*
+%{_datadir}/license/bzip2
+%{_bindir}/*
+%manifest %{name}.manifest
 
 %files libs
 %defattr(-,root,root,-)
+%{_datadir}/license/bzip2-libs
 /%{_lib}/*so.*
+%manifest %{name}.manifest
 
 %files devel
 %defattr(-,root,root,-)
@@ -105,4 +114,5 @@ rm -rf ${RPM_BUILD_ROOT}
 /%{_libdir}/*so
 # Temporary for rpm
 %{_libdir}/*.a
+%manifest %{name}.manifest
 

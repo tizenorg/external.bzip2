@@ -3,7 +3,7 @@ Summary: A file compression utility
 Name: bzip2
 Version: 1.0.5
 Release: 4
-License: BSD
+License: Bzip2
 Group: Applications/File
 URL: http://www.bzip.org/
 Source: http://www.bzip.org/%{version}/bzip2-%{version}.tar.gz
